@@ -39,10 +39,10 @@
             <version>${mybatis.version}</version>
         </dependency>
 
-        <!-- MariaDB JDBC Driver -->
+        <!-- MySQL JDBC Driver -->
         <dependency>
-            <groupId>org.mariadb.jdbc</groupId>
-            <artifactId>mariadb-java-client</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
         <!-- Spring JDBC -->
@@ -69,6 +69,7 @@
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
         </dependency>
+
         <!-- JSTL 구현체 -->
         <dependency>
             <groupId>org.glassfish.web</groupId>
