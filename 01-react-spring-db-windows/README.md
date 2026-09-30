@@ -1,50 +1,41 @@
 # Lab 01. React + Spring Boot + MySQL Integration
 
-강사가 제공한 React / Spring Boot 예제를 로컬 환경에 맞게 구성하고,
-Spring Boot와 MySQL 간 데이터 조회가 정상적으로 동작하는지 검증한 실습입니다.
-
-> **Current status:** Spring Boot ↔ MySQL 연동 완료 / React 연동 진행 예정
+강사 제공 React / Spring Boot 예제를 로컬 MySQL 8.0 환경에 맞게 재구성한 통합 실습.  
+React → Vite Proxy → Spring Boot → MyBatis → MySQL 흐름 구성 및 CRUD 동작 검증.
 
 ## Scope
 
 | 구분 | 내용 |
 |---|---|
 | Provided | React + Vite frontend, Spring Boot + MyBatis backend, MariaDB 기준 datasource 설정, `testDB.sql` |
-| My work | 로컬 MySQL 8.0 구성, DB schema 적용, datasource 변경, credential 환경변수 분리, `/users` 조회 검증 |
+| My work | MySQL 8.0 적용, datasource 변경, credential 환경변수 분리, React–Spring Boot 연동, CRUD 동작 검증 |
 
-강사 제공 코드는 baseline commit으로 남기고, 이후 로컬 환경에 맞게 변경한 작업은 별도 commit으로 분리했습니다.
+강사 제공 코드는 baseline commit으로 분리.  
+로컬 환경에 맞춘 설정 변경 및 연동 작업은 후속 commit으로 관리.
 
 ## Architecture
 
 ```text
-React
-  ↓ HTTP
-Spring Boot REST API
-  ↓ MyBatis / JDBC
+Browser
+  ↓
+React + Vite (:5173)
+  ↓  /users
+Vite Proxy
+  ↓
+Spring Boot REST API (:8081)
+  ↓
+Service
+  ↓
+MyBatis Mapper
+  ↓
 MySQL 8.0
 ```
 
-현재는 아래 구간까지 검증을 완료했습니다.
+## Backend Configuration
 
-```text
-GET /users
-   ↓
-UserController
-   ↓
-UserService
-   ↓
-UserMapper
-   ↓
-UserMapper.xml
-   ↓
-MySQL testDB.user
-   ↓
-JSON response
-```
+### Database
 
-## Local DB Setup
-
-강사가 제공한 `testDB.sql`을 로컬 MySQL 8.0에 적용했습니다.
+강사 제공 `testDB.sql`을 MySQL 8.0에 적용.
 
 ```text
 testDB
@@ -54,7 +45,7 @@ testDB
     └── email VARCHAR(100)
 ```
 
-테이블 생성 후 아래 쿼리로 schema와 조회 결과를 확인했습니다.
+Schema 및 데이터 조회 확인.
 
 ```sql
 SHOW TABLES;
@@ -62,24 +53,13 @@ DESC user;
 SELECT * FROM user;
 ```
 
-## Backend Configuration
+### JDBC / Datasource
 
-기존 백엔드는 MariaDB 기준으로 설정되어 있었지만, 로컬 PC에서 이미 사용 중인 MySQL 8.0에 맞춰 datasource 구성을 변경했습니다.
+MariaDB 기준 설정을 로컬 MySQL 8.0 환경으로 변경.
 
-### JDBC Driver
-
-`pom.xml`의 MariaDB driver를 MySQL Connector/J로 교체했습니다.
-
-```xml
-<dependency>
-    <groupId>com.mysql</groupId>
-    <artifactId>mysql-connector-j</artifactId>
-</dependency>
-```
-
-### Datasource
-
-DB 접속정보는 repository에 직접 저장하지 않고 IntelliJ Run Configuration의 환경변수로 분리했습니다.
+- `mariadb-java-client` → `mysql-connector-j`
+- JDBC Driver → `com.mysql.cj.jdbc.Driver`
+- DB credential → IntelliJ Run Configuration 환경변수로 분리
 
 ```properties
 spring.datasource.url=${DB_URL}
@@ -88,7 +68,89 @@ spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
-Relevant files:
+## Frontend Integration
+
+Vite 개발 서버에서 `/users` 요청을 Spring Boot `:8081`로 전달하도록 Proxy 사용.
+
+```javascript
+server: {
+  proxy: {
+    '/users': {
+      target: 'http://localhost:8081',
+      changeOrigin: true
+    }
+  }
+}
+```
+
+React 화면 경로와 Backend API 경로 분리.
+
+```text
+React Router
+/            → UserList
+/edit/:id    → EditUser
+
+REST API
+GET    /users
+GET    /users/{id}
+POST   /users
+PUT    /users/{id}
+DELETE /users/{id}
+```
+
+## Request Flow
+
+```text
+React
+  ↓ axios
+Vite Proxy
+  ↓
+UserController
+  ↓
+UserService
+  ↓
+UserMapper
+  ↓
+UserMapper.xml
+  ↓
+MySQL
+  ↓
+JSON Response
+  ↓
+React state update
+```
+
+## Verification
+
+| Method | Endpoint | 확인 내용 |
+|---|---|---|
+| GET | `/users` | 사용자 목록 조회 |
+| GET | `/users/{id}` | 단일 사용자 조회 |
+| POST | `/users` | 사용자 추가 및 DB row 생성 |
+| PUT | `/users/{id}` | 사용자 정보 수정 및 DB 반영 |
+| DELETE | `/users/{id}` | 사용자 삭제 및 DB 반영 |
+
+브라우저 화면과 MySQL Workbench 결과 비교를 통한 CRUD 반영 확인.
+
+![CRUD verification](./docs/images/crud-verification.PNG)
+
+Chrome DevTools Network 탭에서 `/users` 요청 및 `200 OK` 응답 확인.
+
+![Network verification](./docs/images/network-verification.PNG)
+
+## Troubleshooting
+
+### MySQL authentication error
+
+```text
+Access denied for user 'root'@'localhost' (using password: YES)
+```
+
+원인: IntelliJ Run Configuration의 `DB_PASSWORD` 입력값 오류.  
+조치: 환경변수 수정 후 Spring Boot 재시작.  
+결과: datasource 연결 및 `GET /users` 조회 정상화.
+
+## Relevant Files
 
 - [pom.xml](./backend/pom.xml)
 - [application.properties](./backend/src/main/resources/application.properties)
@@ -96,34 +158,9 @@ Relevant files:
 - [UserService.java](./backend/src/main/java/com/co/mybatis/service/UserService.java)
 - [UserMapper.java](./backend/src/main/java/com/co/mybatis/mapper/UserMapper.java)
 - [UserMapper.xml](./backend/src/main/resources/mapper/UserMapper.xml)
-
-## Verification
-
-Spring Boot 실행 후 아래 endpoint를 호출해 MySQL의 `testDB.user` 조회 결과가 JSON으로 반환되는 것을 확인했습니다.
-
-```http
-GET http://localhost:8081/users
-```
-
-확인한 항목:
-
-- Spring Boot가 port `8081`에서 정상 실행
-- MySQL datasource 연결 성공
-- MyBatis `findAll()` 쿼리 실행
-- `/users` 요청에 JSON 응답 반환
-
-## Troubleshooting
-
-### MySQL authentication error
-
-첫 `/users` 호출에서 아래 오류가 발생했습니다.
-
-```text
-Access denied for user 'root'@'localhost' (using password: YES)
-```
-
-DB 서버나 JDBC 설정이 아니라 IntelliJ Run Configuration의 비밀번호 입력값이 잘못된 것이 원인이었습니다.
-환경변수를 수정하고 애플리케이션을 재시작한 뒤 정상 조회를 확인했습니다.
+- [vite.config.js](./frontend/vite.config.js)
+- [UserList.jsx](./frontend/src/UserList.jsx)
+- [EditUser.jsx](./frontend/src/EditUser.jsx)
 
 ## Environment
 
@@ -132,6 +169,7 @@ DB 서버나 JDBC 설정이 아니라 IntelliJ Run Configuration의 비밀번호
 - Spring Boot 3.5.4
 - MyBatis
 - MySQL 8.0
-- React 19 / Vite
+- React 19
+- Vite 7
 - Node.js 24
 - npm 11
