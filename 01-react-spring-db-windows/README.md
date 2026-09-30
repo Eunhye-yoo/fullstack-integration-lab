@@ -1,27 +1,20 @@
-# Lab 01. React + Spring Boot + Database Integration
+# Lab 01. React + Spring Boot + MySQL Integration
 
-## 1. Goal
+강사가 제공한 React / Spring Boot 예제를 로컬 환경에 맞게 구성하고,
+Spring Boot와 MySQL 간 데이터 조회가 정상적으로 동작하는지 검증한 실습입니다.
 
-React 프론트엔드, Spring Boot 백엔드, 데이터베이스를 직접 연결하여
-사용자의 요청이 데이터베이스까지 전달되고 다시 화면으로 반환되는 전체 흐름을 이해한다.
+> **Current status:** Spring Boot ↔ MySQL 연동 완료 / React 연동 진행 예정
 
-## 2. Starting Point
+## Scope
 
-강사가 제공한 예제 코드를 기반으로 실습한다.
+| 구분 | 내용 |
+|---|---|
+| Provided | React + Vite frontend, Spring Boot + MyBatis backend, MariaDB 기준 datasource 설정, `testDB.sql` |
+| My work | 로컬 MySQL 8.0 구성, DB schema 적용, datasource 변경, credential 환경변수 분리, `/users` 조회 검증 |
 
-- Frontend: React
-- Backend: Spring Boot
-- Original DB configuration: MariaDB
+강사 제공 코드는 baseline commit으로 남기고, 이후 로컬 환경에 맞게 변경한 작업은 별도 commit으로 분리했습니다.
 
-### Provided Source
-
-- React: https://github.com/Joes-s/react_boot_front
-- Spring Boot: https://github.com/Joes-s/react_boot_back
-- Database: `testDB.sql`
-
-> 강사 제공 코드는 별도 baseline commit으로 먼저 기록하고, 이후 로컬 환경에 맞춘 연동 변경을 별도 commit으로 분리했다.
-
-## 3. Target Architecture
+## Architecture
 
 ```text
 React
@@ -31,22 +24,27 @@ Spring Boot REST API
 MySQL 8.0
 ```
 
-## 4. Environment
+현재는 아래 구간까지 검증을 완료했습니다.
 
-- Windows 10
-- Java 17
-- Spring Boot 3.5.4
-- MyBatis
-- MySQL 8.0
-- Node.js 24
-- npm 11
-- Git 2.55
+```text
+GET /users
+   ↓
+UserController
+   ↓
+UserService
+   ↓
+UserMapper
+   ↓
+UserMapper.xml
+   ↓
+MySQL testDB.user
+   ↓
+JSON response
+```
 
-## 5. Implementation
+## Local DB Setup
 
-### 5.1 Database Setup
-
-강사가 제공한 `testDB.sql`을 로컬 MySQL 8.0에서 실행하여 다음 구조를 생성했다.
+강사가 제공한 `testDB.sql`을 로컬 MySQL 8.0에 적용했습니다.
 
 ```text
 testDB
@@ -56,54 +54,7 @@ testDB
     └── email VARCHAR(100)
 ```
 
-### 5.2 Spring Boot → MySQL Configuration
-
-강사 제공 백엔드는 MariaDB 기준이었지만, 로컬 Windows 환경에서는 이미 실행 중인 MySQL 8.0을 사용하도록 변경했다.
-
-- MariaDB JDBC driver → MySQL Connector/J
-- JDBC driver class → `com.mysql.cj.jdbc.Driver`
-- DB 접속정보는 소스에 직접 기록하지 않고 환경변수로 분리
-  - `DB_URL`
-  - `DB_USERNAME`
-  - `DB_PASSWORD`
-
-실제 변경 내용은 아래 파일에서 확인할 수 있다.
-
-- [backend/pom.xml](./backend/pom.xml)
-- [backend/src/main/resources/application.properties](./backend/src/main/resources/application.properties)
-
-## 6. Request Flow
-
-```text
-GET /users
-   ↓
-UserController.listUsers()
-   ↓
-UserService.getAllUsers()
-   ↓
-UserMapper.findAll()
-   ↓
-UserMapper.xml
-   ↓
-SELECT * FROM user
-   ↓
-MySQL testDB
-   ↓
-JSON response
-```
-
-관련 코드:
-
-- [UserController.java](./backend/src/main/java/com/co/mybatis/controller/UserController.java)
-- [UserService.java](./backend/src/main/java/com/co/mybatis/service/UserService.java)
-- [UserMapper.java](./backend/src/main/java/com/co/mybatis/mapper/UserMapper.java)
-- [UserMapper.xml](./backend/src/main/resources/mapper/UserMapper.xml)
-
-## 7. Verification
-
-### Database Verification
-
-MySQL에서 다음을 직접 확인했다.
+테이블 생성 후 아래 쿼리로 schema와 조회 결과를 확인했습니다.
 
 ```sql
 SHOW TABLES;
@@ -111,43 +62,76 @@ DESC user;
 SELECT * FROM user;
 ```
 
-### Backend Integration Verification
+## Backend Configuration
 
-Spring Boot 실행 후 다음 endpoint를 호출했다.
+기존 백엔드는 MariaDB 기준으로 설정되어 있었지만, 로컬 PC에서 이미 사용 중인 MySQL 8.0에 맞춰 datasource 구성을 변경했습니다.
+
+### JDBC Driver
+
+`pom.xml`의 MariaDB driver를 MySQL Connector/J로 교체했습니다.
+
+```xml
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+</dependency>
+```
+
+### Datasource
+
+DB 접속정보는 repository에 직접 저장하지 않고 IntelliJ Run Configuration의 환경변수로 분리했습니다.
+
+```properties
+spring.datasource.url=${DB_URL}
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+```
+
+Relevant files:
+
+- [pom.xml](./backend/pom.xml)
+- [application.properties](./backend/src/main/resources/application.properties)
+- [UserController.java](./backend/src/main/java/com/co/mybatis/controller/UserController.java)
+- [UserService.java](./backend/src/main/java/com/co/mybatis/service/UserService.java)
+- [UserMapper.java](./backend/src/main/java/com/co/mybatis/mapper/UserMapper.java)
+- [UserMapper.xml](./backend/src/main/resources/mapper/UserMapper.xml)
+
+## Verification
+
+Spring Boot 실행 후 아래 endpoint를 호출해 MySQL의 `testDB.user` 조회 결과가 JSON으로 반환되는 것을 확인했습니다.
 
 ```http
 GET http://localhost:8081/users
 ```
 
-2026-09-30 로컬 환경에서 `/users` 요청이 정상 응답하는 것을 확인했다.
+확인한 항목:
 
-> README 문장만으로 실행 성공을 증명하는 것은 아니다. 이 저장소에서는 **강사 제공 baseline commit과 이후 MySQL 연동 commit을 분리**하고, 실제 JDBC 의존성·datasource 설정·MyBatis 조회 코드를 함께 남겨 변경 근거를 확인할 수 있게 했다. 실행 결과 캡처나 테스트 로그는 추가 증거가 필요할 때 별도로 보강한다.
+- Spring Boot가 port `8081`에서 정상 실행
+- MySQL datasource 연결 성공
+- MyBatis `findAll()` 쿼리 실행
+- `/users` 요청에 JSON 응답 반환
 
-## 8. Troubleshooting
+## Troubleshooting
 
-### MySQL authentication failure
+### MySQL authentication error
 
-**Problem**
+첫 `/users` 호출에서 아래 오류가 발생했습니다.
 
 ```text
 Access denied for user 'root'@'localhost' (using password: YES)
 ```
 
-**Cause**
+DB 서버나 JDBC 설정이 아니라 IntelliJ Run Configuration의 비밀번호 입력값이 잘못된 것이 원인이었습니다.
+환경변수를 수정하고 애플리케이션을 재시작한 뒤 정상 조회를 확인했습니다.
 
-IntelliJ Run Configuration의 `DB_PASSWORD` 값이 실제 MySQL 비밀번호와 다르게 입력되어 있었다.
+## Environment
 
-**Resolution**
-
-`DB_PASSWORD` 값을 수정한 뒤 Spring Boot 애플리케이션을 재시작했다.
-
-**Result**
-
-Spring Boot에서 MySQL 연결에 성공했고 `GET /users` 요청을 통해 `testDB.user` 조회를 확인했다.
-
-## 9. What I Learned
-
-- IntelliJ의 Database 도구 연결과 Spring Boot의 datasource 연결은 서로 독립적이다.
-- JDBC Driver는 Java 애플리케이션과 DBMS 사이의 연결을 담당한다.
-- 환경변수를 사용하면 DB 비밀번호를 소스 코드와 GitHub에 직접 노출하지 않을 수 있다.
-- 연결 문제는 DB 서버 → 인증 → Spring datasource → MyBatis → API 순서로 계층별 확인하면 원인을 좁히기 쉽다.
+- Windows 10
+- Java 17
+- Spring Boot 3.5.4
+- MyBatis
+- MySQL 8.0
+- React 19 / Vite
+- Node.js 24
+- npm 11
