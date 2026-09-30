@@ -1,17 +1,17 @@
 # Lab 01. React + Spring Boot + MySQL Integration
 
 강사 제공 React / Spring Boot 예제를 로컬 MySQL 8.0 환경에 맞게 재구성한 통합 실습.  
-React → Vite Proxy → Spring Boot → MyBatis → MySQL 흐름 구성 및 CRUD 동작 검증.
+React → Vite Proxy → Spring Boot → MyBatis → MySQL 연결 및 CRUD 동작 검증.
 
 ## Scope
 
 | 구분 | 내용 |
 |---|---|
 | Provided | React + Vite frontend, Spring Boot + MyBatis backend, MariaDB 기준 datasource 설정, `testDB.sql` |
-| My work | MySQL 8.0 적용, datasource 변경, credential 환경변수 분리, React–Spring Boot 연동, CRUD 동작 검증 |
+| My work | MySQL 8.0 적용, datasource 변경, credential 환경변수 분리, React–Spring Boot 연동, CRUD 검증, Edit API 경로 수정 |
 
 강사 제공 코드는 baseline commit으로 분리.  
-로컬 환경에 맞춘 설정 변경 및 연동 작업은 후속 commit으로 관리.
+로컬 환경 설정과 연동 변경은 후속 commit으로 관리.
 
 ## Architecture
 
@@ -70,7 +70,7 @@ spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
 ## Frontend Integration
 
-Vite 개발 서버에서 `/users` 요청을 Spring Boot `:8081`로 전달하도록 Proxy 사용.
+Vite 개발 서버에서 `/users` 요청을 Spring Boot `:8081`로 전달하도록 Proxy 구성.
 
 ```javascript
 server: {
@@ -83,7 +83,7 @@ server: {
 }
 ```
 
-React 화면 경로와 Backend API 경로 분리.
+React Router 화면 경로와 Backend API 경로 분리.
 
 ```text
 React Router
@@ -134,33 +134,33 @@ React state update
 
 ![CRUD verification](./docs/images/crud-verification.PNG)
 
-Chrome DevTools Network 탭에서 `/users` 요청 및 `200 OK` 응답 확인.
+Chrome DevTools Network 탭에서 API 요청 및 `200 OK` 응답 확인.
 
 ![Network verification](./docs/images/network-verification.PNG)
 
 ## Troubleshooting
 
-### MySQL authentication error
+### Edit 요청만 실패
 
-```text
-Access denied for user 'root'@'localhost' (using password: YES)
+**Issue**  
+목록 조회·추가·삭제는 정상 동작했으나 Edit 진입 시 사용자 조회 실패.
+
+**Cause**  
+Edit 요청에 특정 서버의 absolute URL이 하드코딩되어 있어 로컬 Vite Proxy 우회.
+
+```javascript
+axios.get(`http://54.180.94.5:8081/users/${id}`)
 ```
 
-원인: IntelliJ Run Configuration의 `DB_PASSWORD` 입력값 오류.  
-조치: 환경변수 수정 후 Spring Boot 재시작.  
-결과: datasource 연결 및 `GET /users` 조회 정상화.
+**Fix**  
+다른 CRUD 요청과 동일하게 relative path 사용.
 
-## Relevant Files
+```javascript
+axios.get(`/users/${id}`)
+```
 
-- [pom.xml](./backend/pom.xml)
-- [application.properties](./backend/src/main/resources/application.properties)
-- [UserController.java](./backend/src/main/java/com/co/mybatis/controller/UserController.java)
-- [UserService.java](./backend/src/main/java/com/co/mybatis/service/UserService.java)
-- [UserMapper.java](./backend/src/main/java/com/co/mybatis/mapper/UserMapper.java)
-- [UserMapper.xml](./backend/src/main/resources/mapper/UserMapper.xml)
-- [vite.config.js](./frontend/vite.config.js)
-- [UserList.jsx](./frontend/src/UserList.jsx)
-- [EditUser.jsx](./frontend/src/EditUser.jsx)
+**Result**  
+Vite Proxy를 통한 `GET /users/{id}` 요청 정상화 및 Edit 화면 진입 확인.
 
 ## Environment
 
