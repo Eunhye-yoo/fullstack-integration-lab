@@ -35,7 +35,7 @@ export default function UserList() {
 
   const editUser = async (id) => {
     try {
-        const res = await axios.get(`http://54.180.94.5:8081/users/${id}`);
+        const res = await axios.get(`/users/${id}`);
         if(res.status !== 200) {
             throw new Error('Network response was not ok')
         };
