@@ -3,7 +3,7 @@
 강사 제공 React / Spring Boot 예제를 로컬 MySQL 8.0 환경에 맞게 재구성한 통합 실습.  
 React → Vite Proxy → Spring Boot → MyBatis → MySQL 연결 및 CRUD 동작 검증.
 
-## Scope
+## Overview
 
 | 구분 | 내용 |
 |---|---|
@@ -31,9 +31,11 @@ MyBatis Mapper
 MySQL 8.0
 ```
 
-## Backend Configuration
+## Key Implementation
 
-### Database
+### Backend Configuration
+
+#### Database
 
 강사 제공 `testDB.sql`을 MySQL 8.0에 적용.
 
@@ -53,7 +55,7 @@ DESC user;
 SELECT * FROM user;
 ```
 
-### JDBC / Datasource
+#### JDBC / Datasource
 
 MariaDB 기준 설정을 로컬 MySQL 8.0 환경으로 변경.
 
@@ -68,7 +70,7 @@ spring.datasource.password=${DB_PASSWORD}
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
-## Frontend Integration
+### Frontend Integration
 
 Vite 개발 서버에서 `/users` 요청을 Spring Boot `:8081`로 전달하도록 Proxy 구성.
 
@@ -98,7 +100,7 @@ PUT    /users/{id}
 DELETE /users/{id}
 ```
 
-## Request Flow
+### Request Flow
 
 ```text
 React
