@@ -139,6 +139,10 @@ Application 전용 DB 계정은 Spring Server에서만 접속하도록 제한.
 'springapp'@'10.10.0.11'
 ```
 
+DB 초기 구성과 SQL Import를 완료한 뒤 Application 전용 계정으로 연결.
+
+![DB import](./docs/images/10-db-import.PNG)
+
 DB Credential은 Source Code에 직접 저장하지 않고 환경변수로 주입.
 
 ```bash
@@ -153,7 +157,9 @@ export DB_PASSWORD='<LOCAL_SECRET>'
 
 #### Spring Boot Runtime
 
-Maven Wrapper로 Backend 실행 후 Tomcat `8081`과 MySQL Connection Pool 초기화 확인.
+Java Runtime 환경 확인 후 Maven Wrapper로 Backend 실행, Tomcat `8081`과 MySQL Connection Pool 초기화 확인.
+
+![Spring runtime](./docs/images/09-spring-runtime.png)
 
 ![Spring Boot runtime](./docs/images/13-spring-boot-runtime.PNG)
 
@@ -189,6 +195,10 @@ server: {
 ```
 
 React Server의 `localhost`는 **React VM 자기 자신**을 의미하므로 Remote Backend 연결에는 사용 불가.
+
+React Server의 Node.js Runtime과 Project 실행 환경 확인.
+
+![React runtime](./docs/images/08-react-runtime.PNG)
 
 Vite는 외부 Interface에서도 요청을 받을 수 있도록 실행.
 
