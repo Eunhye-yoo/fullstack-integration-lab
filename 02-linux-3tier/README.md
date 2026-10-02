@@ -67,9 +67,11 @@ React          Spring Boot     MySQL
 
 ---
 
-## Key Design Decisions
+## Key Implementation
 
-### 1. Why an Internal Network?
+### Design Decisions
+
+#### 1. Why an Internal Network?
 
 홈 환경에서 VMware Bridged Network를 테스트했을 때 VM이 외부 네트워크의 IP를 직접 할당받는 것을 확인했습니다.
 
@@ -89,7 +91,7 @@ VMnet8 NAT
 
 ---
 
-### 2. Why Static IP?
+#### 2. Why Static IP?
 
 Frontend, Backend, Database가 서로의 주소를 직접 참조하므로 서버 주소가 변경되지 않도록 역할별 IP를 고정했습니다.
 
@@ -104,7 +106,7 @@ Gateway → 10.10.0.1
 
 ---
 
-### 3. Linux Router & NAT
+#### 3. Linux Router & NAT
 
 Linux가 LAN에서 받은 패킷을 WAN으로 전달하도록 IPv4 Forwarding을 활성화하고, 내부 사설 IP를 Router WAN 주소로 변환하도록 NAT를 구성했습니다.
 
@@ -121,9 +123,9 @@ WAN 주소가 DHCP로 할당되므로 고정 SNAT 대신 현재 Interface IP를 
 
 ---
 
-## Application Integration
+### Application Integration
 
-### Spring Boot → MySQL
+#### Spring Boot → MySQL
 
 MySQL은 별도 DB VM에서 실행하므로 `localhost`가 아닌 실제 DB Server IP를 사용했습니다.
 
@@ -153,7 +155,7 @@ export DB_PASSWORD='<LOCAL_SECRET>'
 
 ---
 
-### Spring Boot Runtime
+#### Spring Boot Runtime
 
 Maven Wrapper로 Backend 실행 후 Tomcat `8081`과 MySQL Connection Pool 초기화 확인.
 
@@ -169,7 +171,7 @@ curl http://10.10.0.11:8081/users
 
 ---
 
-### React → Spring Boot
+#### React → Spring Boot
 
 1차 Windows Lab에서는 두 Application이 같은 PC에 있어:
 
@@ -202,7 +204,7 @@ npm run dev -- --host 0.0.0.0
 
 ---
 
-## DNAT / Port Forwarding
+### DNAT / Port Forwarding
 
 Windows Host는 VMnet2 내부망에 직접 연결되어 있지 않으므로 NAT Router의 `5173` 포트를 내부 React Server로 전달했습니다.
 
@@ -227,7 +229,7 @@ React 10.10.0.10:5173
 
 ---
 
-## End-to-End Flow
+### End-to-End Flow
 
 ```text
 Windows Browser
