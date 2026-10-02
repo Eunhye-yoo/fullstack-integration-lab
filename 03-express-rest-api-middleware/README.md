@@ -1,8 +1,8 @@
 # Lab 03. Express REST API & Middleware
 
-Ubuntu 22.04 환경에서 Express.js 서버를 구성하고, Postman을 사용해 **Routing · Middleware · HTTP Method · Request Data · Response** 흐름을 검증한 실습.
+Ubuntu 22.04 환경에서 Express.js 서버를 구성하고, Postman으로 **Routing · Middleware · HTTP Method · Request Data · Response** 흐름을 검증한 실습.
 
-기본 API 구현에 기존 Linux NAT Router 구조와 VS Code Remote SSH를 연결하여 **Windows Client → NAT Router → Express Server** 전체 접근 경로까지 확인.
+기본 API 구현에 기존 Linux NAT Router 구조를 연결하여 **Windows Client → NAT Router → Express Server** 접근 경로까지 함께 확인.
 
 ---
 
@@ -23,10 +23,10 @@ Ubuntu 22.04 환경에서 Express.js 서버를 구성하고, Postman을 사용�
 ### Extended / My Work
 
 - Express Server를 기존 VMnet2 내부망에 배치
-- NAT Router의 3000 Port → Express Server DNAT 구성
+- NAT Router `:3000` → Express Server `:3000` DNAT 구성
 - Windows Postman에서 내부 Express API 접근 검증
 - NAT Router를 Jump Host로 사용한 VS Code Remote SSH 개발 환경 구성
-- Express `app.js`의 Middleware 실행 순서와 Router 연결 구조 분석
+- `app.js`의 Middleware 실행 순서와 Router 연결 구조 분석
 
 ---
 
@@ -76,15 +76,12 @@ npm start
 ```
 
 ```text
-Node.js
-→ JavaScript Runtime
-
-npm
-→ Package / Dependency Management
-
-Express
-→ Node.js Web Server / API Framework
+Node.js → JavaScript Runtime
+npm     → Package / Dependency Management
+Express → Node.js Web Server / API Framework
 ```
+
+![Express runtime verification](./docs/images/01-express-runtime-verification.png)
 
 ---
 
@@ -136,41 +133,9 @@ Text / JSON / HTML
 
 ---
 
-### API Endpoints
-
-| Method | Endpoint | Input | Response |
-|---|---|---|---|
-| GET | `/test` | - | Text |
-| POST | `/test` | - | JSON |
-| GET | `/test/plus` | Query Parameter | Text |
-| GET | `/test/minus/:num1/:num2` | Path Parameter | Text |
-| POST | `/test/profile` | JSON Body | JSON |
-| PUT | `/test/update/:id` | Path + JSON Body | JSON |
-| DELETE | `/test/delete/:id` | Path Parameter | JSON |
-
-Example:
-
-```text
-GET /test/plus?num1=10&num2=20
-→ req.query
-→ Number conversion
-→ 30
-```
-
-```text
-PUT /test/update/1
-+ {"name":"김철수"}
-
-→ req.params.id
-→ req.body.name
-→ {"message":"1번 회원 이름 변경(김철수)"}
-```
-
----
-
 ### DNAT / API Access
 
-Windows Host는 VMnet2 내부망의 `10.10.0.20`에 직접 접근하지 않고 NAT Router를 통해 Express API에 접근.
+Windows Host에는 VMnet2 직접 경로를 두지 않았으므로 NAT Router WAN의 `:3000` 요청을 내부 Express Server로 전달.
 
 ```bash
 sudo iptables -t nat -A PREROUTING \
@@ -183,16 +148,22 @@ sudo iptables -t nat -A PREROUTING \
 
 ```text
 Windows Postman
-→ Router WAN :3000
+→ Router WAN 192.168.5.128:3000
 → DNAT
 → Express 10.10.0.20:3000
 ```
+
+![Express DNAT rule](./docs/images/02-express-dnat-rule.png)
+
+Postman에서 Router WAN 주소로 기본 Express Endpoint 호출 후 HTTP 200 응답 확인.
+
+![Postman Express connectivity](./docs/images/03-postman-express-connectivity.png)
 
 ---
 
 ### Remote Development
 
-VMware Console의 Terminal 편집 대신 NAT Router를 Jump Host로 사용하여 Windows VS Code에서 Express Server 직접 편집.
+VMware Console에서 직접 편집하는 대신 NAT Router를 Jump Host로 사용하여 Windows VS Code에서 Express Server의 Project를 직접 편집.
 
 ```text
 Windows VS Code
@@ -202,39 +173,127 @@ Windows VS Code
   10.10.0.20
 ```
 
-Remote VS Code 화면에서 수정한 파일은 Windows 복사본이 아니라 Linux Server의 실제 Project File에 저장.
+Remote VS Code에서 수정한 파일은 Windows 복사본이 아니라 Linux Server의 실제 Project File에 저장.
 
 ---
 
-## Verification
+## API Verification
 
-| Check | Result |
-|---|---|
-| Express Runtime / TCP 3000 Listen | PASS |
-| Windows → NAT Router → Express DNAT | PASS |
-| GET `/test` Text Response | PASS |
-| POST `/test` JSON Response | PASS |
-| Query Parameter / `req.query` | PASS |
-| Path Parameter / `req.params` | PASS |
-| JSON Body / `req.body` | PASS |
-| PUT Params + Body | PASS |
-| DELETE Path Parameter | PASS |
-| Postman HTTP 200 Response | PASS |
+### GET / POST
+
+동일한 `/test` Path라도 HTTP Method에 따라 별도 Handler로 처리.
+
+```javascript
+router.get('/', function(req, res) {
+  res.send('GET 요청 테스트 성공');
+});
+
+router.post('/', function(req, res) {
+  res.json({
+    message: 'POST 요청 테스트 성공'
+  });
+});
+```
+
+![GET test API](./docs/images/04-get-test-api.png)
+
+![POST test API](./docs/images/05-post-test-api.png)
+
+### Query Parameter
+
+```text
+GET /test/plus?num1=10&num2=20
+→ req.query
+→ Number conversion
+→ 30
+```
+
+![Query parameter API](./docs/images/06-query-param-plus-api.png)
+
+### Path Parameter
+
+```text
+GET /test/minus/10/20
+→ req.params
+→ 큰 수 - 작은 수
+→ 10
+```
+
+![Path parameter API](./docs/images/07-path-param-minus-api.png)
+
+### Request Body
+
+```text
+POST /test/profile
++ JSON Body
+→ express.json()
+→ req.body
+→ JSON Response
+```
+
+![Request body API](./docs/images/08-request-body-profile-api.png)
+
+### Params + Body
+
+```text
+PUT /test/update/1
++ {"name":"김철수"}
+
+→ req.params.id
+→ req.body.name
+→ JSON Response
+```
+
+![Update API](./docs/images/09-update-api.png)
+
+### DELETE
+
+DB 미연동 상태에서 실제 Row 삭제 대신 DELETE Request → Path Parameter 추출 → JSON Response 흐름 검증.
+
+![Delete API](./docs/images/10-delete-api.png)
+
+---
+
+## Verification Summary
+
+| Method | Endpoint | Input | Express Access | Result |
+|---|---|---|---|---|
+| GET | `/test` | - | - | PASS |
+| POST | `/test` | - | - | PASS |
+| GET | `/test/plus` | Query | `req.query` | PASS |
+| GET | `/test/minus/:num1/:num2` | Path | `req.params` | PASS |
+| POST | `/test/profile` | JSON Body | `req.body` | PASS |
+| PUT | `/test/update/:id` | Path + JSON Body | `req.params + req.body` | PASS |
+| DELETE | `/test/delete/:id` | Path | `req.params` | PASS |
 
 ---
 
 ## Troubleshooting
 
-### VMware Console 편집 불편
+### Host → Internal Express Server 직접 접근 경로 부재
 
-VMware Console의 `nano`에서 Windows Clipboard와 한글 입력이 불편하여 Remote SSH 방식으로 전환.
+**Symptom**
+
+Windows Postman에서 내부 VM의 `10.10.0.20:3000`을 직접 Target으로 사용할 수 없는 구조.
+
+**Cause**
+
+Express Server는 VMnet2 내부망에만 연결되어 있고 Windows Host에는 VMnet2 Host Adapter를 두지 않아 Host → `10.10.0.20` 직접 Route가 존재하지 않음.
+
+**Fix**
+
+NAT Router의 WAN Interface로 들어오는 TCP `:3000` 요청을 `10.10.0.20:3000`으로 DNAT.
 
 ```text
-VMware Console 직접 편집
-→ VS Code Remote SSH
+Windows
+→ 192.168.5.128:3000
+→ PREROUTING DNAT
+→ 10.10.0.20:3000
 ```
 
-NAT Router를 SSH Jump Host로 사용해 내부망 Express Server Project를 Windows VS Code에서 직접 수정.
+**Verification**
+
+DNAT Rule의 Packet Counter와 Postman HTTP 200 Response를 통해 외부 측 Client → Router → 내부 Express Server 경로 확인.
 
 ---
 
@@ -253,6 +312,6 @@ NAT Router를 SSH Jump Host로 사용해 내부망 Express Server Project를 Win
 
 ## Detailed Lab Notes
 
-명령어, Express Generator 구조, `app.js` Middleware 흐름, Postman 사용법, Query / Params / Body 차이와 각 API 구현 과정은 Notion에 상세 기록.
+Express Generator 구조, `app.js` Middleware 흐름, Postman 사용법, Query / Params / Body 차이와 각 API 구현 과정은 Notion에 상세 기록.
 
 [View detailed Infrastructure Lab notes](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9?pvs=204)
