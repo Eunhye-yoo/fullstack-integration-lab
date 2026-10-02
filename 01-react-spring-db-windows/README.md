@@ -187,7 +187,7 @@ Vite Proxy를 통한 `GET /users/{id}` 요청 정상화 및 Edit 화면 진입 �
 
 Backend에는 JDK 17, Frontend에는 현재 Vite dependency의 Node.js 요구사항에 맞는 Runtime 필요. 아래는 현재 소스 기준 실행 절차이며 재설치 검증 완료를 뜻하지 않음.
 
-1. MySQL에 `testDB.user` 준비. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에서 내려받아 압축 해제. 저장소에는 SQL 사본이 없으며 이 파일의 새 환경 Import는 이번 문서 검토에서 실행하지 않음.
+1. MySQL에 `testDB.user` 준비. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에서 내려받아 압축 해제. 새 환경에서의 초기 DB Import는 미검증.
 2. Backend 실행 환경에 `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` 설정. 예: `DB_URL=jdbc:mysql://localhost:3306/testDB`.
 3. 저장소 루트 기준 각 Terminal에서 실행:
 
