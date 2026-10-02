@@ -12,7 +12,18 @@ The repository starts with local application integration and progressively expan
 | --- | --- | --- |
 | [01 · React + Spring Boot + MySQL](./01-react-spring-db-windows) | React · Vite Proxy · Spring Boot · MyBatis · MySQL 8 | Browser ↔ API ↔ DB CRUD |
 | [02 · Linux 3-Tier + NAT Router](./02-linux-3tier) | Ubuntu VMs · Static IP · Linux Routing/NAT · SSH/SCP · DNAT | Windows → Router → React → Spring Boot → MySQL |
-| [03 · Express REST API & Middleware](./03-express-rest-api-middleware) | Node.js · Express · Routing · Middleware · Postman · REST API | Postman → NAT Router → Express API |
+| [03 · Express REST API & Middleware](./03-express-rest-api-middleware) | Node.js · Express · Routing · Middleware · Postman · REST API | Query / Params / Body → HTTP Response |
+
+## GitHub ↔ Notion Navigation
+
+The two indexes use different numbering; each pair below records the same mission from application and infrastructure perspectives.
+
+| Application / GitHub | Environment / Notion |
+| --- | --- |
+| [GitHub 02 · Linux 3-Tier](./02-linux-3tier/) | [Notion 03 · Linux 3-Tier + NAT Router](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175) |
+| [GitHub 03 · Express REST API](./03-express-rest-api-middleware/) | [Notion 04 · Express REST API & Middleware](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9) |
+
+GitHub 01 contains the React/Spring source reused for the Linux lab. GitHub 02 contains deployment evidence; GitHub 03 includes the uploaded Express source. The VyOS/FastAPI/MariaDB Notion lab is currently planned and has no matching completed application lab here.
 
 ## Progression
 
