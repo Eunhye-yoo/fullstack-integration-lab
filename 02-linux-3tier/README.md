@@ -231,7 +231,7 @@ mysql -h 10.10.0.12 -u springapp -p
 3. React VM에서 Lab 01 frontend의 Vite proxy를 `10.10.0.11:8081`로 변경 후 `npm install`, `npm run dev -- --host 0.0.0.0`
 4. Router WAN `:5173`으로 접속하여 API와 DB 결과 대조
 
-저장소의 Lab 01 `vite.config.js`는 Windows용 `localhost:8081` 설정 유지. Linux용 proxy 예제는 VM에서 적용한 환경별 변경이며 저장소에 별도 Linux 소스 사본이 있는 것은 아님. 강사 제공 `testDB.sql`은 현재 저장소에 포함되지 않아 깨끗한 DB에서 전체 과정을 그대로 재현하는 것은 **NOT VERIFIED**.
+저장소의 Lab 01 `vite.config.js`는 Windows용 `localhost:8081` 설정 유지. Linux용 proxy 예제는 VM에서 적용한 환경별 변경이며 저장소에 별도 Linux 소스 사본이 있는 것은 아님. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에 첨부. 압축 해제 후 사용하며 저장소에는 SQL 사본을 두지 않음. 깨끗한 DB에서 전체 재실행은 **NOT VERIFIED**.
 
 ## What I Learned
 
