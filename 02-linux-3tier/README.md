@@ -200,7 +200,7 @@ Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL Dat
 | Vite 외부 인터페이스 Listen | 15-react-vite-runtime |
 | Browser 결과와 DB 데이터 대조 | 17-linux-crud-verification |
 
-기존 실습 기록에는 CRUD 수행이 남아 있고, 캡처에서 조회 화면과 DB row 변화 확인. 모든 CRUD method별 HTTP 요청·응답이 각각 캡처된 것은 아니므로 현재 증거 범위와 구분. 이번 검토는 코드·기존 캡처 대조이며 VM 재실행은 수행하지 않음.
+브라우저에서 CRUD 수행 후 조회 화면과 DB row 변화 대조. 캡처는 조회·DB 반영 결과를 보여주며, 각 CRUD method의 개별 HTTP 요청·응답 로그는 미기록.
 
 라우팅·Gateway·NAT counter·SSH/SCP 검증은 같은 미션의 Notion 03에 상세 기록.
 
