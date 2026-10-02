@@ -63,8 +63,6 @@ React          Spring Boot     MySQL
 | Spring Boot | Backend API | `10.10.0.11:8081` |
 | MySQL | Database | `10.10.0.12:3306` |
 
-![NAT Router interfaces](./docs/images/03-router-interfaces.PNG)
-
 ---
 
 ## Key Implementation
@@ -118,8 +116,6 @@ sudo iptables -t nat -A POSTROUTING \
 ```
 
 WAN 주소가 DHCP로 할당되므로 고정 SNAT 대신 현재 Interface IP를 사용하는 `MASQUERADE` 적용.
-
-![NAT traffic verification](./docs/images/07-nat-traffic-verification.PNG)
 
 ---
 
@@ -224,8 +220,6 @@ Router WAN :5173
       ↓ DNAT
 React 10.10.0.10:5173
 ```
-
-![React port forwarding](./docs/images/16-react-port-forward.PNG)
 
 ---
 
