@@ -72,7 +72,7 @@ npm start
 
 - `package.json`: Express `~4.16.1`, EJS `~2.6.1`
 - `package-lock.json`: Express `4.16.4`, EJS `2.6.2`
-- Express VM의 정확한 Node.js/npm 버전은 현재 캡처로 **NOT VERIFIED**. 다른 Lab의 버전을 그대로 적용하지 않음.
+- Express VM의 Node.js/npm 버전: 미기록.
 
 ![Express runtime verification](./docs/images/01-express-runtime-verification.png)
 
@@ -203,7 +203,7 @@ PUT과 DELETE 모두 DB 미연동 상태. UPDATE/DELETE 메시지를 만드는 �
 
 ## Verification
 
-기존 Postman 캡처에서 GET/POST, 덧셈 `10 + 20 → 30`, 절대 차이 `30 / 7 → 23`, profile body 반환, PUT/DELETE 응답과 HTTP 200 확인. 이번 문서 검토에서는 소스·캡처를 대조했으며 VM을 다시 실행한 검증은 아님.
+Postman에서 GET/POST, 덧셈 `10 + 20 → 30`, 절대 차이 `30 / 7 → 23`, profile body 반환, PUT/DELETE 응답과 HTTP 200 확인.
 
 ### API Summary
 
