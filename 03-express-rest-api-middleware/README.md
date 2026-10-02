@@ -2,11 +2,11 @@
 
 Express.js에서 **HTTP Method · Routing · Middleware · Query / Path Parameter · Request Body · Response**가 어떻게 연결되는지 직접 구현하고 Postman으로 검증한 API 실습.
 
-> Network / DNAT / SSH 구성 과정은 [Notion Infrastructure Lab](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9?pvs=204)에 별도 기록.
+> 같은 미션의 Network / DNAT / SSH 구성 과정은 [Notion 04 · Express REST API & Middleware](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9?pvs=204)에 별도 기록.
 
 ---
 
-## Focus
+## Overview
 
 이번 Lab의 개발 측 핵심은 요청 형식에 따라 값을 어디서 꺼내고 어떤 형식으로 응답할지 구분하는 것.
 
@@ -32,7 +32,9 @@ Response
 ## Project Structure
 
 ```text
-express-middleware-lab/
+03-express-rest-api-middleware/
+├─ .gitignore
+├─ README.md
 ├─ app.js
 ├─ bin/
 │  └─ www
@@ -42,6 +44,7 @@ express-middleware-lab/
 │  └─ test.js
 ├─ views/
 ├─ public/
+├─ docs/images/
 ├─ package.json
 └─ package-lock.json
 ```
@@ -54,14 +57,22 @@ express-middleware-lab/
 
 ---
 
-## Express Runtime
+## Runtime
+
+저장소에 업로드된 소스를 실행하는 절차. 새 generator 프로젝트를 생성하지 않고 현재 폴더의 `package.json`과 `bin/www` 사용.
 
 ```bash
-express --view=ejs express-middleware-lab
-cd express-middleware-lab
+git clone https://github.com/Eunhye-yoo/fullstack-integration-lab.git
+cd fullstack-integration-lab/03-express-rest-api-middleware
 npm install
 npm start
 ```
+
+기본 주소는 `http://localhost:3000`. `bin/www`에서 `PORT` 환경변수로 포트 변경 가능. `node_modules/`는 Git 추적 대상에서 제외.
+
+- `package.json`: Express `~4.16.1`, EJS `~2.6.1`
+- `package-lock.json`: Express `4.16.4`, EJS `2.6.2`
+- Express VM의 정확한 Node.js/npm 버전은 현재 캡처로 **NOT VERIFIED**. 다른 Lab의 버전을 그대로 적용하지 않음.
 
 ![Express runtime verification](./docs/images/01-express-runtime-verification.png)
 
@@ -81,7 +92,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/test', testRouter);
 ```
 
-`express.json()`이 JSON Request Body를 Parsing한 뒤 `req.body`로 전달.
+`express.json()`은 `Content-Type: application/json`에 맞는 Request Body를 Parsing하여 `req.body`로 제공. `express.urlencoded({ extended: false })`는 URL-encoded form body 처리. `app.use()` 등록 순서에 따라 parser가 `/test` Router보다 먼저 실행.
 
 최종 Endpoint는 Router Mount Path와 개별 Route Path의 결합으로 결정.
 
@@ -110,7 +121,9 @@ router.get('/plus', function(req, res) {
   var num1 = Number(req.query.num1);
   var num2 = Number(req.query.num2);
 
-  res.send(String(num1 + num2));
+  var result = num1 + num2;
+
+  res.send(String(result));
 });
 ```
 
@@ -123,13 +136,13 @@ router.get('/minus/:num1/:num2', function(req, res) {
   var num1 = Number(req.params.num1);
   var num2 = Number(req.params.num2);
 
-  var result = num1 > num2
-    ? num1 - num2
-    : num2 - num1;
+  var result = Math.abs(num1 - num2);
 
   res.send(String(result));
 });
 ```
+
+`minus`는 일반 뺄셈이 아니라 두 수의 **절대 차이** 반환. 캡처의 `/test/minus/30/7` 결과는 `23`.
 
 ![Path parameter API](./docs/images/07-path-param-minus-api.png)
 
@@ -180,13 +193,17 @@ JSON Response
 
 ### DELETE — Path Parameter
 
-이번 Lab은 DB 미연동 상태이므로 실제 Row 삭제가 아니라 DELETE Request 처리 흐름까지 검증.
+PUT과 DELETE 모두 DB 미연동 상태. UPDATE/DELETE 메시지를 만드는 요청·응답 흐름이며, 실제 데이터 수정·삭제나 저장을 구현한 것은 아님.
 
 ![Delete API](./docs/images/10-delete-api.png)
 
 ---
 
-## API Summary
+## Verification
+
+기존 Postman 캡처에서 GET/POST, 덧셈 `10 + 20 → 30`, 절대 차이 `30 / 7 → 23`, profile body 반환, PUT/DELETE 응답과 HTTP 200 확인. 이번 문서 검토에서는 소스·캡처를 대조했으며 VM을 다시 실행한 검증은 아님.
+
+### API Summary
 
 | Method | Endpoint | Input | Response |
 |---|---|---|---|
@@ -200,6 +217,10 @@ JSON Response
 
 ---
 
+### Current Scope
+
+HTTP method와 입력 위치를 구분한 학습용 API. 숫자 입력 검증, 인증, DB 영속화, 운영 배포는 검증 범위에 포함하지 않음. `/test/update/:id`, `/test/delete/:id`는 실습 경로이며 일반적인 리소스 중심 REST 경로 설계와 구분.
+
 ## What I Learned
 
 - HTTP Method와 URL Path를 조합해 API Handler 분리
@@ -211,8 +232,8 @@ JSON Response
 
 ---
 
-## Infrastructure Notes
+## Related Infrastructure Lab
 
 Ubuntu VM, DNAT, 내부망 접근 경로, SSH Jump Host 구성 및 Network Troubleshooting은 Notion에 분리 기록.
 
-[View Infrastructure Lab](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9?pvs=204)
+[Notion 04 · Express REST API & Middleware](https://app.notion.com/p/3ed1b198732a8195bf58df22d368f5c9?pvs=204)
