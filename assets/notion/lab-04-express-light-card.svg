@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675">
+<rect width="1200" height="675" rx="36" fill="#FFFFFF"/>
+<rect x="0" width="14" height="675" rx="7" fill="#3B82F6"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="72" y="105" font-size="18" fill="#94A3B8" letter-spacing="4">LAB 04 / API</text>
+<text x="72" y="235" font-size="64" font-weight="700" fill="#111827">Express REST API</text>
+<text x="76" y="300" font-size="28" fill="#64748B">Routing · Middleware · Postman</text>
+<text x="76" y="520" font-size="20" fill="#94A3B8">REQUEST → MIDDLEWARE → ROUTER → RESPONSE</text>
+</g>
+<g transform="translate(760 210)" fill="none" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<rect x="0" y="0" width="155" height="100" rx="16"/><rect x="230" y="0" width="155" height="100" rx="16"/>
+<path d="M155 50H230"/><path d="M202 24L230 50L202 76"/>
+<circle cx="77" cy="50" r="14"/><path d="M65 50H89"/><path d="M77 38V62"/>
+<circle cx="307" cy="50" r="14"/><path d="M295 50H319"/>
+</g>
+</svg>
