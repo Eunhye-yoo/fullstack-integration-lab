@@ -117,7 +117,7 @@ UserMapper.xml
   ↓
 MySQL
   ↓
-JSON Response
+Response (GET: JSON / POST·PUT·DELETE: Text)
   ↓
 React state update
 ```
@@ -175,3 +175,43 @@ Vite Proxy를 통한 `GET /users/{id}` 요청 정상화 및 Edit 화면 진입 �
 - Vite 7
 - Node.js 24
 - npm 11
+
+
+## Project Structure
+
+- [frontend/](./frontend/) — React 화면·Axios 요청·Vite proxy
+- [backend/](./backend/) — Controller·Service·MyBatis Mapper 및 Maven 실행 설정
+- [docs/images/](./docs/images/) — 브라우저·DB·Network 검증 캡처
+
+## Runtime / Reproduction
+
+Backend에는 JDK 17, Frontend에는 현재 Vite dependency의 Node.js 요구사항에 맞는 Runtime 필요. 아래는 현재 소스 기준 실행 절차이며 재설치 검증 완료를 뜻하지 않음.
+
+1. MySQL에 `testDB.user` 준비. 강사 제공 `testDB.sql`은 현재 저장소에 포함되지 않아 초기 SQL 파일이 필요함.
+2. Backend 실행 환경에 `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` 설정. 예: `DB_URL=jdbc:mysql://localhost:3306/testDB`.
+3. 저장소 루트 기준 각 Terminal에서 실행:
+
+~~~powershell
+# Backend (DB 환경변수 설정 후)
+cd 01-react-spring-db-windows/backend
+.\mvnw.cmd spring-boot:run
+~~~
+
+~~~powershell
+# Frontend (별도 Terminal)
+cd 01-react-spring-db-windows/frontend
+npm install
+npm run dev
+~~~
+
+브라우저: `http://localhost:5173`. Backend: `:8081`. `pom.xml`은 Java 17 / Spring Boot 3.5.4 / MyBatis starter 3.0.3, frontend lockfile은 React 19.1.1 / Vite 7.1.2 기준.
+
+## What I Learned
+
+- 화면 경로와 API 경로를 분리하고 동일 출처의 relative URL로 Vite proxy 활용
+- datasource driver·주소·credential을 실행 환경에 맞게 구성
+- 화면 성공 여부와 API 응답·DB 반영 결과를 함께 확인
+
+## Related Labs
+
+같은 앱을 Linux VM으로 분리한 확장 실습: [GitHub 02 · Linux 3-Tier](../02-linux-3tier/) · [Notion 03 · Linux 3-Tier + NAT Router](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175).
