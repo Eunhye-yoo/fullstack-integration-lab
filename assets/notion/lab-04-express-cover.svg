@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="600" viewBox="0 0 1800 600">
+<rect width="1800" height="600" fill="#FFFFFF"/><rect x="0" width="12" height="600" fill="#3B82F6"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="90" y="116" font-size="20" fill="#94A3B8" letter-spacing="5">PROJECT 04 / API</text><text x="90" y="270" font-size="82" font-weight="700" fill="#111827">Express REST API</text><text x="94" y="338" font-size="30" fill="#64748B">Routing · Middleware · Postman</text><text x="94" y="430" font-size="22" fill="#94A3B8">Design → Build → Verify → Troubleshoot</text></g>
+<g fill="none" stroke="#3B82F6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="1080" y="230" width="185" height="115" rx="16"/><rect x="1370" y="230" width="185" height="115" rx="16"/><path d="M1265 287H1370"/><path d="M1335 252L1370 287L1335 322"/><circle cx="1172" cy="287" r="16"/><path d="M1158 287H1186"/><path d="M1172 273V301"/><circle cx="1462" cy="287" r="16"/><path d="M1448 287H1476"/></g>
+</svg>
