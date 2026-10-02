@@ -63,7 +63,7 @@ React          Spring Boot     MySQL
 | Spring Boot | Backend API | `10.10.0.11:8081` |
 | MySQL | Database | `10.10.0.12:3306` |
 
-![NAT Router interfaces](./docs/images/03-router-interfaces.png)
+![NAT Router interfaces](./docs/images/03-router-interfaces.PNG)
 
 ---
 
@@ -117,7 +117,7 @@ sudo iptables -t nat -A POSTROUTING \
 
 WAN 주소가 DHCP로 할당되므로 고정 SNAT 대신 현재 Interface IP를 사용하는 `MASQUERADE` 적용.
 
-![NAT traffic verification](./docs/images/07-nat-traffic-verification.png)
+![NAT traffic verification](./docs/images/07-nat-traffic-verification.PNG)
 
 ---
 
@@ -149,7 +149,7 @@ export DB_USERNAME='springapp'
 export DB_PASSWORD='<LOCAL_SECRET>'
 ```
 
-![Spring to DB connectivity](./docs/images/12-spring-db-connectivity.png)
+![Spring to DB connectivity](./docs/images/12-spring-db-connectivity.PNG)
 
 ---
 
@@ -157,7 +157,7 @@ export DB_PASSWORD='<LOCAL_SECRET>'
 
 Maven Wrapper로 Backend 실행 후 Tomcat `8081`과 MySQL Connection Pool 초기화 확인.
 
-![Spring Boot runtime](./docs/images/13-spring-boot-runtime.png)
+![Spring Boot runtime](./docs/images/13-spring-boot-runtime.PNG)
 
 React Server에서 직접 API 요청도 검증했습니다.
 
@@ -165,7 +165,7 @@ React Server에서 직접 API 요청도 검증했습니다.
 curl http://10.10.0.11:8081/users
 ```
 
-![API verification](./docs/images/14-api-verification.png)
+![API verification](./docs/images/14-api-verification.PNG)
 
 ---
 
@@ -198,7 +198,7 @@ Vite는 외부 Interface에서도 요청을 받을 수 있도록 실행했습니
 npm run dev -- --host 0.0.0.0
 ```
 
-![React Vite runtime](./docs/images/15-react-vite-runtime.png)
+![React Vite runtime](./docs/images/15-react-vite-runtime.PNG)
 
 ---
 
@@ -223,7 +223,7 @@ Router WAN :5173
 React 10.10.0.10:5173
 ```
 
-![React port forwarding](./docs/images/16-react-port-forward.png)
+![React port forwarding](./docs/images/16-react-port-forward.PNG)
 
 ---
 
@@ -246,7 +246,7 @@ MySQL
 
 최종적으로 Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL의 실제 Data와 비교하여 전체 CRUD 흐름을 검증했습니다.
 
-![End-to-end CRUD verification](./docs/images/17-linux-crud-verification.png)
+![End-to-end CRUD verification](./docs/images/17-linux-crud-verification.PNG)
 
 ---
 
