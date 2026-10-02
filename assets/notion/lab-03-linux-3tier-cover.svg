@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="600" viewBox="0 0 1800 600">
+<rect width="1800" height="600" fill="#FFFFFF"/><rect x="0" width="12" height="600" fill="#14B8A6"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="90" y="116" font-size="20" fill="#94A3B8" letter-spacing="5">PROJECT 03 / SYSTEM</text><text x="90" y="270" font-size="82" font-weight="700" fill="#111827">Linux 3-Tier + NAT</text><text x="94" y="338" font-size="30" fill="#64748B">React · Spring Boot · MySQL · DNAT</text><text x="94" y="430" font-size="22" fill="#94A3B8">Design → Build → Verify → Troubleshoot</text></g>
+<g fill="none" stroke="#14B8A6" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="1080" y="245" width="180" height="92" rx="15"/><rect x="1330" y="245" width="180" height="92" rx="15"/><rect x="1330" y="390" width="180" height="92" rx="15"/><path d="M1260 291H1330M1420 337V390"/><circle cx="1038" cy="291" r="14"/><path d="M1052 291H1080"/><circle cx="1552" cy="436" r="14"/><path d="M1510 436H1538"/></g>
+</svg>
