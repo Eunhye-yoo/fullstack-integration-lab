@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="600" viewBox="0 0 1800 600">
+<rect width="1800" height="600" fill="#FFFFFF"/><rect x="0" width="12" height="600" fill="#8B5CF6"/>
+<g font-family="Arial,Helvetica,sans-serif"><text x="90" y="116" font-size="20" fill="#94A3B8" letter-spacing="5">PROJECT 02 / SERVER</text><text x="90" y="270" font-size="82" font-weight="700" fill="#111827">VyOS · Web · API</text><text x="94" y="338" font-size="30" fill="#64748B">Port Forward · Apache · FastAPI · MariaDB</text><text x="94" y="430" font-size="22" fill="#94A3B8">Design → Build → Verify → Troubleshoot</text></g>
+<g fill="none" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="1140" cy="320" r="66" stroke="#8B5CF6"/><circle cx="1450" cy="320" r="66" stroke="#8B5CF6"/><path d="M1206 320H1384" stroke="#8B5CF6"/><path d="M1345 284L1384 320L1345 356" stroke="#8B5CF6"/><circle cx="1140" cy="320" r="11" fill="#8B5CF6" stroke="none"/><circle cx="1450" cy="320" r="11" fill="#8B5CF6" stroke="none"/><path d="M1450 254V170" stroke="#14B8A6"/><circle cx="1450" cy="150" r="14" stroke="#14B8A6"/></g>
+</svg>
