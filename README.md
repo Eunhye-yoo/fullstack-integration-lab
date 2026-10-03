@@ -4,6 +4,10 @@ Hands-on labs connecting **frontend, backend, database, Linux servers, network p
 
 The repository starts with local application integration and progressively expands the same flow into separated Linux servers, routed network environments, and middleware/API labs.
 
+<p align="center">
+  <a href="./README.ko.md">한국어 README</a>
+</p>
+
 > Detailed infrastructure build notes, commands, verification screenshots, and troubleshooting records are maintained in the [Notion Infrastructure Lab](https://app.notion.com/p/Infrastructure-Lab-3dd1b198732a8059b1b1f2f410f08dc6?source=copy_link).
 
 ## Labs
