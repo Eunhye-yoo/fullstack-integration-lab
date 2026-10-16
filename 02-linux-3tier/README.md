@@ -71,6 +71,8 @@ React          Spring Boot     MySQL
 
 Windows Lab의 애플리케이션을 역할별 Ubuntu VM으로 분리 배치. 고정 주소의 React / Spring Boot / MySQL 서버와 Linux NAT Router를 사용한 학습 환경이며, 운영용 배포 구성으로 검증한 것은 아님.
 
+> **환경별 설정 주의:** 이 Lab은 [Lab 01의 원본 Source](../01-react-spring-db-windows/)를 재사용함. GitHub에 있는 `frontend/vite.config.js`의 기본 Proxy 대상은 Windows 실습용 `http://localhost:8081`이며, Linux VM에 배치할 때 `http://10.10.0.11:8081`로 변경한 과정은 아래 설정 예시와 [Notion Lab 03](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)에 기록됨. GitHub 원본에 해당 Linux 전용 변경이 커밋되어 있다고 가정하지 말 것.
+
 - 내부 서버 간 통신: 같은 `10.0.0.0/8`에서 직접 전달
 - Windows 진입점: Router WAN `:5173` → DNAT → React/Vite
 - 라우팅·NAT·SSH/SCP·Netplan 및 환경 설계 이유: [Notion 03 · Linux 3-Tier + NAT Router](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)
