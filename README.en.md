@@ -10,6 +10,20 @@ The repository starts with local application integration and progressively expan
 
 > Detailed infrastructure build notes, commands, verification screenshots, and troubleshooting records are maintained in the [Notion Infrastructure Lab](https://app.notion.com/p/Infrastructure-Lab-3dd1b198732a8059b1b1f2f410f08dc6?source=copy_link).
 
+
+## Security Engineering Foundation
+
+**Infrastructure foundations for a Cloud & AI Security portfolio.** The primary evidence is [Linux 3-Tier + NAT Router](./02-linux-3tier/): server separation, access paths, and layer-by-layer connectivity checks.
+
+| Foundation | What this lab supports |
+| --- | --- |
+| Network path | Static IP/gateway, IP forwarding, MASQUERADE, DNAT port forwarding |
+| Management access | SSH/SCP, distinguishing the command's local host from remote servers |
+| Data access | Spring → MySQL:3306, app account scoped to the Spring host in the lab record |
+| Troubleshooting | Separate IP/gateway/DNS failures from API/proxy/JDBC configuration |
+
+**Scope:** This is a connectivity lab, not a firewall-hardening or attack-blocking experiment. NAT does not replace authorization/firewall policy. The lab used disabled host firewalls; production isolation is not claimed. Clean-environment reproduction and individual CRUD HTTP logs remain unverified. Original source, commands, screenshots, and detailed lab records are preserved.
+
 ## Labs
 
 | Lab | Focus | Key Verification |

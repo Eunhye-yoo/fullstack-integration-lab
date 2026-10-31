@@ -8,6 +8,20 @@
 
 > 상세한 인프라 구축 과정, 실제 명령어, 검증 Screenshot, Troubleshooting 기록은 [Notion Infrastructure Lab](https://app.notion.com/p/Infrastructure-Lab-3dd1b198732a8059b1b1f2f410f08dc6?source=copy_link)에 정리합니다.
 
+
+## 보안 엔지니어링의 기반
+
+**Cloud & AI Security 포트폴리오의 인프라 기초 실습.** 우선 확인할 증거는 [Linux 3-Tier + NAT Router](./02-linux-3tier/). 서버 분리·접근 경로와 계층별 연결 검증 중심.
+
+| 기초 역량 | 실제 실습 범위 |
+| --- | --- |
+| 네트워크 경로 | 고정 IP·Gateway, IP Forwarding, MASQUERADE, DNAT Port Forwarding |
+| 관리 접근 | SSH/SCP, 명령 실행 서버의 localhost와 원격 서버 구분 |
+| 데이터 접근 | Spring → MySQL:3306, 실습 기록의 Spring 호스트 전용 앱 계정 |
+| 오류 분리 | IP·Gateway·DNS 문제와 API·Proxy·JDBC 설정 구분 |
+
+**검증 경계:** 연결 실습이며 방화벽 강화·공격 차단 실험 아님. NAT는 인가·방화벽 정책을 대체하지 않음. 실습에서 호스트 방화벽을 비활성화한 조건으로, 운영 환경 격리 수준을 주장하지 않음. 새 환경 전체 재현과 CRUD별 개별 HTTP 로그 미검증. 기존 코드·명령·캡처·상세 기록 보존.
+
 ## Labs
 
 | Lab | 주요 내용 | 핵심 검증 |
