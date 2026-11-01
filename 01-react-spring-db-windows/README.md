@@ -1,7 +1,8 @@
 # Lab 01. React + Spring Boot + MySQL Integration
 
-강사 제공 React / Spring Boot 예제를 로컬 MySQL 8.0 환경에 맞게 재구성한 통합 실습.  
-React → Vite Proxy → Spring Boot → MyBatis → MySQL 연결 및 CRUD 동작 검증.
+React–Spring Boot–MySQL을 연결하고 사용자 CRUD를 검증한 실습.
+
+강사 제공 예제의 DB 설정을 로컬 MySQL 8.0에 맞추고, React 화면에서 보낸 요청과 API 응답·DB 반영 결과를 대조했습니다.
 
 ## Overview
 
@@ -185,9 +186,9 @@ Vite Proxy를 통한 `GET /users/{id}` 요청 정상화 및 Edit 화면 진입 �
 
 ## Runtime / Reproduction
 
-Backend에는 JDK 17, Frontend에는 현재 Vite dependency의 Node.js 요구사항에 맞는 Runtime 필요. 아래는 현재 소스 기준 실행 절차이며 재설치 검증 완료를 뜻하지 않음.
+JDK 17, MySQL과 Vite 실행이 가능한 Node.js 환경을 준비합니다.
 
-1. MySQL에 `testDB.user` 준비. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에서 내려받아 압축 해제. 새 환경에서의 초기 DB Import는 미검증.
+1. MySQL에 `testDB.user` 준비. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에서 내려받아 압축 해제. 사용할 스키마에 맞춰 SQL을 확인한 뒤 적용합니다.
 2. Backend 실행 환경에 `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` 설정. 예: `DB_URL=jdbc:mysql://localhost:3306/testDB`.
 3. 저장소 루트 기준 각 Terminal에서 실행:
 
@@ -206,11 +207,11 @@ npm run dev
 
 브라우저: `http://localhost:5173`. Backend: `:8081`. `pom.xml`은 Java 17 / Spring Boot 3.5.4 / MyBatis starter 3.0.3, frontend lockfile은 React 19.1.1 / Vite 7.1.2 기준.
 
-## What I Learned
+## 실습에서 확인한 내용
 
-- 화면 경로와 API 경로를 분리하고 동일 출처의 relative URL로 Vite proxy 활용
-- datasource driver·주소·credential을 실행 환경에 맞게 구성
-- 화면 성공 여부와 API 응답·DB 반영 결과를 함께 확인
+- React 화면 경로와 Backend API 경로 분리
+- 상대 URL과 Vite Proxy로 요청 경로 통일
+- DB 설정을 실행 환경에 맞추고 화면·API·DB 결과 대조
 
 ## Related Labs
 

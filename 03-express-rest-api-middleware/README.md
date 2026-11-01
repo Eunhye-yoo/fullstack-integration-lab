@@ -8,7 +8,7 @@ Express.js에서 **HTTP Method · Routing · Middleware · Query / Path Paramete
 
 ## Overview
 
-이번 Lab의 개발 측 핵심은 요청 형식에 따라 값을 어디서 꺼내고 어떤 형식으로 응답할지 구분하는 것.
+Query·Path·JSON Body에서 요청값을 읽고 Text·JSON 응답을 반환하는 코드 구성.
 
 ```text
 Request
@@ -59,7 +59,7 @@ Response
 
 ## Runtime
 
-저장소에 업로드된 소스를 실행하는 절차. 새 generator 프로젝트를 생성하지 않고 현재 폴더의 `package.json`과 `bin/www` 사용.
+현재 폴더의 package.json과 bin/www로 실행합니다.
 
 ```bash
 git clone https://github.com/Eunhye-yoo/fullstack-integration-lab.git
@@ -195,7 +195,7 @@ JSON Response
 
 ### DELETE — Path Parameter
 
-PUT과 DELETE 모두 DB 미연동 상태. UPDATE/DELETE 메시지를 만드는 요청·응답 흐름이며, 실제 데이터 수정·삭제나 저장을 구현한 것은 아님.
+PUT·DELETE는 DB 없이 요청값에 따른 응답을 반환하는 실습 API.
 
 ![Delete API](./docs/images/10-delete-api.png)
 
@@ -219,11 +219,7 @@ Postman에서 GET/POST, 덧셈 `10 + 20 → 30`, 절대 차이 `30 / 7 → 23`, 
 
 ---
 
-### Current Scope
-
-HTTP method와 입력 위치를 구분한 학습용 API. 숫자 입력 검증, 인증, DB 영속화, 운영 배포는 검증 범위에 포함하지 않음. `/test/update/:id`, `/test/delete/:id`는 실습 경로이며 일반적인 리소스 중심 REST 경로 설계와 구분.
-
-## What I Learned
+## 실습에서 확인한 내용
 
 - HTTP Method와 URL Path를 조합해 API Handler 분리
 - `req.query`, `req.params`, `req.body`의 역할 구분

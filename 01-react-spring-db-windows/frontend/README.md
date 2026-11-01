@@ -1,12 +1,20 @@
-# React + Vite
+# 사용자 관리 화면
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React·Axios로 사용자 목록 조회·추가·수정·삭제를 처리하는 프론트엔드 실습. Vite Proxy로 /users 요청을 Spring Boot API에 전달합니다.
 
-Currently, two official plugins are available:
+- 화면: 사용자 목록, 등록·수정
+- API: GET·POST /users, GET·PUT·DELETE /users/{id}
+- 연결: React → Vite Proxy → Spring Boot → MySQL
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 실행
 
-## Expanding the ESLint configuration
+Backend와 DB를 준비한 뒤 이 폴더에서 실행합니다.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+기본 접속 주소: http://localhost:5173. API Proxy 대상은 vite.config.js에서 확인할 수 있습니다.
+
+[전체 구성·실행·검증](../README.md)

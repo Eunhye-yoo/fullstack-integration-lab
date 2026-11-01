@@ -69,9 +69,9 @@ React          Spring Boot     MySQL
 
 ### Deployment Context
 
-Windows Lab의 애플리케이션을 역할별 Ubuntu VM으로 분리 배치. 고정 주소의 React / Spring Boot / MySQL 서버와 Linux NAT Router를 사용한 학습 환경이며, 운영용 배포 구성으로 검증한 것은 아님.
+Windows Lab의 앱을 React·Spring Boot·MySQL용 Ubuntu VM으로 나누고 Linux NAT Router를 추가한 실습 구성.
 
-> **환경별 설정 주의:** 이 Lab은 [Lab 01의 원본 Source](../01-react-spring-db-windows/)를 재사용함. GitHub에 있는 `frontend/vite.config.js`의 기본 Proxy 대상은 Windows 실습용 `http://localhost:8081`이며, Linux VM에 배치할 때 `http://10.10.0.11:8081`로 변경한 과정은 아래 설정 예시와 [Notion Lab 03](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)에 기록됨. GitHub 원본에 해당 Linux 전용 변경이 커밋되어 있다고 가정하지 말 것.
+> **소스 위치:** [Lab 01](../01-react-spring-db-windows/)의 코드를 재사용합니다. Linux에서는 DB 주소와 Vite Proxy 대상을 각 VM의 IP로 변경했습니다. 저장소의 원본 Proxy 설정은 Windows용 localhost:8081입니다.
 
 - 내부 서버 간 통신: 같은 `10.0.0.0/8`에서 직접 전달
 - Windows 진입점: Router WAN `:5173` → DNAT → React/Vite
@@ -202,7 +202,7 @@ Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL Dat
 | Vite 외부 인터페이스 Listen | 15-react-vite-runtime |
 | Browser 결과와 DB 데이터 대조 | 17-linux-crud-verification |
 
-브라우저에서 CRUD 수행 후 조회 화면과 DB row 변화 대조. 캡처는 조회·DB 반영 결과를 보여주며, 각 CRUD method의 개별 HTTP 요청·응답 로그는 미기록.
+브라우저에서 CRUD 수행 후 조회 화면과 DB row 변화 대조. 조회 화면과 DB 반영 결과는 아래 캡처에 기록.
 
 라우팅·Gateway·NAT counter·SSH/SCP 검증은 같은 미션의 Notion 03에 상세 기록.
 
@@ -214,7 +214,7 @@ Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL Dat
 
 Spring Server에서 `sudo mysql` 실행 시 Remote DB가 아니라 Spring VM 자신의 Local MySQL 탐색.
 
-Remote Server 접근 시 대상 Host 명시 필요. 캡처 12에는 첫 접속 실패 뒤 원격 로그인 성공이 함께 남아 있으나, 그 사이 조치의 정확한 명령·시간은 별도 **NOT VERIFIED**.
+원격 DB 접속에는 대상 Host 지정이 필요합니다. 캡처 12에서 원격 로그인 결과를 확인할 수 있습니다.
 
 ```bash
 mysql -h 10.10.0.12 -u springapp -p
@@ -233,7 +233,7 @@ mysql -h 10.10.0.12 -u springapp -p
 3. React VM에서 Lab 01 frontend의 Vite proxy를 `10.10.0.11:8081`로 변경 후 `npm install`, `npm run dev -- --host 0.0.0.0`
 4. Router WAN `:5173`으로 접속하여 API와 DB 결과 대조
 
-저장소의 Lab 01 `vite.config.js`는 Windows용 `localhost:8081` 설정 유지. Linux용 proxy 예제는 VM에서 적용한 환경별 변경이며 저장소에 별도 Linux 소스 사본이 있는 것은 아님. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에 첨부. 압축 해제 후 사용하며 저장소에는 SQL 사본을 두지 않음. 깨끗한 DB에서 전체 재실행은 **NOT VERIFIED**.
+저장소의 Lab 01 `vite.config.js`는 Windows용 `localhost:8081` 설정 유지. Linux용 proxy 예제는 VM에서 적용한 환경별 변경이며 저장소에 별도 Linux 소스 사본이 있는 것은 아님. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에 첨부. 압축 해제 후 사용하며 저장소에는 SQL 사본을 두지 않음. 새 DB에서는 스키마를 준비한 뒤 앱 연결을 확인합니다.
 
 ## What I Learned
 
