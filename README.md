@@ -2,7 +2,7 @@
 
 [English](./README.en.md)
 
-React·API·DB·Linux 서버를 연결한 실습 모음. DB·Proxy 설정을 환경에 맞추고 서버를 분리한 뒤 API 응답·브라우저 화면·DB 데이터를 대조했습니다.
+React·API·DB·Linux 서버를 연결한 실습 모음. DB·Proxy 설정을 환경에 맞추고 서버를 분리한 뒤 API 응답·브라우저 화면·DB 데이터 대조.
 
 ## Linux 3-Tier와 NAT Router
 
@@ -24,11 +24,11 @@ React·API·DB·Linux 서버를 연결한 실습 모음. DB·Proxy 설정을 환
 | [02 · Linux 3-Tier](./02-linux-3tier/README.md) | 서버 분리, NAT·DNAT·SSH/SCP, 브라우저→DB 연결 검증 |
 | [03 · Express API](./03-express-rest-api-middleware/README.md) | Query·Path·Body 처리, Middleware 순서, Postman 요청·응답 확인 |
 
-Lab 01의 React/Spring 소스를 Lab 02에서 재사용했습니다. Lab 02에는 배포 기록·캡처를, Lab 03에는 Express 소스를 보관합니다.
+Lab 01의 React/Spring 소스를 Lab 02에서 재사용. Lab 02에는 배포 기록·캡처를, Lab 03에는 Express 소스를 보관.
 
 ## 기술 기록
 
-GitHub에는 애플리케이션 설정·소스·API·DB 캡처를, Notion에는 VM·네트워크 설정·명령어·문제 해결 과정을 기록했습니다.
+GitHub에는 애플리케이션 설정·소스·API·DB 캡처를, Notion에는 VM·네트워크 설정·명령어·문제 해결 과정을 기록.
 
 | GitHub | Notion |
 | --- | --- |
