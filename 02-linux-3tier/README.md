@@ -1,4 +1,4 @@
-# Lab 02. Linux 3-Tier Integration with NAT Router
+# Lab 02 · Linux 3-Tier·NAT Router 구축
 
 React · Spring Boot · MySQL을 각각 별도의 Ubuntu VM으로 분리하고,  
 Linux NAT Router를 추가하여 **Network → Frontend → Backend → Database** 전체 통신 경로를 직접 구성한 실습.
@@ -7,9 +7,9 @@ Linux NAT Router를 추가하여 **Network → Frontend → Backend → Database
 
 ---
 
-## Overview
+## 실습 범위
 
-### Provided Mission
+### 기본 과제
 
 - Ubuntu 22.04 기반 React / Spring Boot / MySQL 서버 분리
 - React: `10.10.0.10`
@@ -18,7 +18,7 @@ Linux NAT Router를 추가하여 **Network → Frontend → Backend → Database
 - Linux 환경에서 Frontend → Backend → Database 연동 검증
 - `testDB.sql`을 SCP로 전달하여 DB 구성
 
-### Extended / My Work
+### 추가 구성
 
 기본 3-VM 구성에 다음 항목 추가.
 
@@ -33,7 +33,7 @@ Linux NAT Router를 추가하여 **Network → Frontend → Backend → Database
 
 ---
 
-## Architecture
+## 네트워크 구성
 
 ```text
 Windows Host
@@ -65,9 +65,9 @@ React          Spring Boot     MySQL
 
 ---
 
-## Key Implementation
+## 주요 구성·연동
 
-### Deployment Context
+### 배포 환경·소스
 
 Windows Lab의 앱을 React·Spring Boot·MySQL용 Ubuntu VM으로 나누고 Linux NAT Router를 추가한 실습 구성.
 
@@ -77,7 +77,7 @@ Windows Lab의 앱을 React·Spring Boot·MySQL용 Ubuntu VM으로 나누고 Lin
 - Windows 진입점: Router WAN `:5173` → DNAT → React/Vite
 - 라우팅·NAT·SSH/SCP·Netplan 및 환경 설계 이유: [Notion 03 · Linux 3-Tier + NAT Router](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)
 
-### Application Integration
+### 애플리케이션 연동
 
 #### Spring Boot → MySQL
 
@@ -113,7 +113,7 @@ export DB_PASSWORD='<LOCAL_SECRET>'
 
 ---
 
-#### Spring Boot Runtime
+#### Spring Boot 실행·확인
 
 Java Runtime 환경 확인 후 Maven Wrapper로 Backend 실행, Tomcat `8081`과 MySQL Connection Pool 초기화 확인.
 
@@ -168,7 +168,7 @@ npm run dev -- --host 0.0.0.0
 
 ---
 
-### End-to-End Flow
+### 요청·데이터 처리 경로
 
 ```text
 Windows Browser
@@ -191,7 +191,7 @@ Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL Dat
 
 ---
 
-## Verification
+## 검증 결과
 
 | Application Check | Evidence |
 |---|---|
@@ -208,9 +208,9 @@ Browser에서 사용자 조회·생성·수정·삭제를 수행하고 MySQL Dat
 
 ---
 
-## Troubleshooting
+## 문제 해결
 
-### `localhost`와 Remote DB의 의미
+### localhost·원격 DB 접속 오류
 
 Spring Server에서 `sudo mysql` 실행 시 Remote DB가 아니라 Spring VM 자신의 Local MySQL 탐색.
 
@@ -224,7 +224,7 @@ mysql -h 10.10.0.12 -u springapp -p
 
 ---
 
-## Runtime / Reproduction
+## 실행·재현
 
 현재 폴더는 배포 기록과 이미지이며 별도의 frontend/backend 소스를 포함하지 않음. [Lab 01 소스](../01-react-spring-db-windows/)를 각 VM에서 재사용하고, 실행 환경에서 DB 주소와 Vite proxy를 변경한 실습.
 
@@ -235,7 +235,7 @@ mysql -h 10.10.0.12 -u springapp -p
 
 저장소의 Lab 01 `vite.config.js`는 Windows용 `localhost:8081` 설정 유지. Linux용 proxy 예제는 VM에서 적용한 환경별 변경이며 저장소에 별도 Linux 소스 사본이 있는 것은 아님. 강사 제공 원본 `testDB.sql`은 [Notion 03 · Database Import](https://app.notion.com/p/3ed1b198732a815091d2e0030512f175)의 `testDB.zip`에 첨부. 압축 해제 후 사용하며 저장소에는 SQL 사본을 두지 않음. 새 DB에서는 스키마를 준비한 뒤 앱 연결을 확인합니다.
 
-## What I Learned
+## 학습 내용
 
 분리 서버에서 `localhost`는 현재 프로세스가 실행되는 VM 자신. 브라우저 요청 주소, Vite proxy 대상, JDBC host를 각각 해당 실행 위치에 맞게 구분.
 
@@ -243,7 +243,7 @@ mysql -h 10.10.0.12 -u springapp -p
 
 ---
 
-## Related Infrastructure Lab
+## 인프라 설정·명령어 기록
 
 전체 구축 과정, 사용 명령어, Netplan 설정, SSH/SCP, MySQL Remote Access, NAT 구성 및 각 명령의 의미는 별도 Infrastructure Lab에 상세 기록.
 
